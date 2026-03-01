@@ -11,6 +11,6 @@ namespace streamfx::encoder::ffmpeg {
 		debug();
 		virtual ~debug(){};
 
-		virtual void properties(ffmpeg_instance* instance, obs_properties_t* props);
+		virtual void properties(ffmpeg_factory* factory, ffmpeg_instance* instance, obs_properties_t* props) override;
 	};
 } // namespace streamfx::encoder::ffmpeg

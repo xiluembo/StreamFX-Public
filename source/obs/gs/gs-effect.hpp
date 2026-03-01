@@ -19,6 +19,10 @@ namespace streamfx::obs::gs {
 		effect() = default;
 		effect(std::string_view code, std::string_view name);
 		effect(std::filesystem::path file);
+		effect(const effect&)            = default;
+		effect& operator=(const effect&) = default;
+		effect(effect&&)                 = default;
+		effect& operator=(effect&&)      = default;
 		~effect();
 
 		std::size_t                         count_techniques();

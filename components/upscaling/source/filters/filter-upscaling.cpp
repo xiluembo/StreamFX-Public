@@ -399,9 +399,9 @@ void streamfx::filter::upscaling::upscaling_instance::task_switch_provider(util:
 		case upscaling_provider::NVIDIA_SUPERRESOLUTION:
 			nvvfxsr_load();
 			{
-				auto data = obs_source_get_settings(_self);
-				nvvfxsr_update(data);
-				obs_data_release(data);
+				auto settings = obs_source_get_settings(_self);
+				nvvfxsr_update(settings);
+				obs_data_release(settings);
 			}
 			break;
 #endif

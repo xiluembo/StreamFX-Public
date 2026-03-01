@@ -53,7 +53,7 @@ using namespace streamfx::encoder::ffmpeg;
 
 debug::debug() : handler("") {}
 
-void debug::properties(ffmpeg_instance* instance, obs_properties_t* props)
+void debug::properties(ffmpeg_factory* factory, ffmpeg_instance* instance, obs_properties_t* props)
 {
 	const AVCodec* codec = instance->get_avcodec();
 
@@ -68,15 +68,15 @@ void debug::properties(ffmpeg_instance* instance, obs_properties_t* props)
 
 	DLOG_INFO("Options for '%s':", codec->name);
 
-	std::pair<AVOptionType, std::string> opt_type_name[] = {
-		{AV_OPT_TYPE_FLAGS, "Flags"}, {AV_OPT_TYPE_INT, "Int"}, {AV_OPT_TYPE_INT64, "Int64"}, {AV_OPT_TYPE_DOUBLE, "Double"}, {AV_OPT_TYPE_FLOAT, "Float"}, {AV_OPT_TYPE_STRING, "String"}, {AV_OPT_TYPE_RATIONAL, "Rational"}, {AV_OPT_TYPE_BINARY, "Binary"}, {AV_OPT_TYPE_DICT, "Dictionary"}, {AV_OPT_TYPE_UINT64, "Unsigned Int64"}, {AV_OPT_TYPE_CONST, "Constant"}, {AV_OPT_TYPE_IMAGE_SIZE, "Image Size"}, {AV_OPT_TYPE_PIXEL_FMT, "Pixel Format"}, {AV_OPT_TYPE_SAMPLE_FMT, "Sample Format"}, {AV_OPT_TYPE_VIDEO_RATE, "Video Rate"}, {AV_OPT_TYPE_DURATION, "Duration"}, {AV_OPT_TYPE_COLOR, "Color"}, {AV_OPT_TYPE_CHANNEL_LAYOUT, "Layout"}, {AV_OPT_TYPE_BOOL, "Bool"},
+	static const std::pair<AVOptionType, std::string> opt_type_name[] = {
+		{AV_OPT_TYPE_FLAGS, "Flags"}, {AV_OPT_TYPE_INT, "Int"}, {AV_OPT_TYPE_INT64, "Int64"}, {AV_OPT_TYPE_DOUBLE, "Double"}, {AV_OPT_TYPE_FLOAT, "Float"}, {AV_OPT_TYPE_STRING, "String"}, {AV_OPT_TYPE_RATIONAL, "Rational"}, {AV_OPT_TYPE_BINARY, "Binary"}, {AV_OPT_TYPE_DICT, "Dictionary"}, {AV_OPT_TYPE_UINT64, "Unsigned Int64"}, {AV_OPT_TYPE_CONST, "Constant"}, {AV_OPT_TYPE_IMAGE_SIZE, "Image Size"}, {AV_OPT_TYPE_PIXEL_FMT, "Pixel Format"}, {AV_OPT_TYPE_SAMPLE_FMT, "Sample Format"}, {AV_OPT_TYPE_VIDEO_RATE, "Video Rate"}, {AV_OPT_TYPE_DURATION, "Duration"}, {AV_OPT_TYPE_COLOR, "Color"}, {AV_OPT_TYPE_CHLAYOUT, "Layout"}, {AV_OPT_TYPE_BOOL, "Bool"},
 	};
 	std::map<std::string, AVOptionType> unit_types;
 
 	const AVOption* opt = nullptr;
 	while ((opt = av_opt_next(ctx->priv_data, opt)) != nullptr) {
 		std::string type_name = "";
-		for (auto kv : opt_type_name) {
+		for (const auto& kv : opt_type_name) {
 			if (opt->type == kv.first) {
 				type_name = kv.second;
 				break;

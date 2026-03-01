@@ -116,6 +116,7 @@ void mirror_instance::migrate(obs_data_t* data, uint64_t version)
 	case 0:
 		obs_data_set_int(data, ST_KEY_SOURCE_AUDIO_LAYOUT, obs_data_get_int(data, "Source.Mirror.Audio.Layout"));
 		obs_data_unset_user_value(data, "Source.Mirror.Audio.Layout");
+		break;
 	case STREAMFX_VERSION:
 		break;
 	}

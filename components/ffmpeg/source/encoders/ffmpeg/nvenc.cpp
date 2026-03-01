@@ -491,14 +491,17 @@ void nvenc::migrate(ffmpeg_factory* factory, ffmpeg_instance* instance, obs_data
 			case 2: // VBR_HQ
 				obs_data_set_int(settings, ST_KEY_RATECONTROL_TWOPASS, 1);
 				obs_data_set_string(settings, ST_KEY_RATECONTROL_MULTIPASS, "qres");
+				[[fallthrough]];
 			case 1: // VBR
 				obs_data_set_string(settings, ST_KEY_RATECONTROL_MODE, "vbr");
 				break;
 			case 5: // CBR_LD_HQ
 				obs_data_set_int(settings, ST_KEY_OTHER_LOWDELAYKEYFRAMESCALE, 1);
+				[[fallthrough]];
 			case 4: // CBR_HQ
 				obs_data_set_int(settings, ST_KEY_RATECONTROL_TWOPASS, 1);
 				obs_data_set_string(settings, ST_KEY_RATECONTROL_MULTIPASS, "qres");
+				[[fallthrough]];
 			case 3: // CBR
 				obs_data_set_string(settings, ST_KEY_RATECONTROL_MODE, "cbr");
 				break;
@@ -621,23 +624,23 @@ void nvenc::update(ffmpeg_factory* factory, ffmpeg_instance* instance, obs_data_
 		}
 
 		if (have_bitrate) {
-			int64_t v = obs_data_get_int(settings, ST_KEY_RATECONTROL_LIMITS_BITRATE_TARGET);
+			int64_t bitrate_val = obs_data_get_int(settings, ST_KEY_RATECONTROL_LIMITS_BITRATE_TARGET);
 
 			// Allow OBS to specify a maximum allowed bitrate.
 			if (obs_data_get_int(settings, "bitrate") != obs_data_get_default_int(settings, "bitrate")) {
 				// obs_data_has_user_value(X, Y) is also true if obs_data_set_Z(X, Y, obs_data_get_Z(X, Y))
-				v = std::clamp<int64_t>(v, -1, obs_data_get_int(settings, "bitrate"));
+				bitrate_val = std::clamp<int64_t>(bitrate_val, -1, obs_data_get_int(settings, "bitrate"));
 			}
 
-			if (v > -1) {
-				context->bit_rate = static_cast<int>(v * 1000);
+			if (bitrate_val > -1) {
+				context->bit_rate = static_cast<int>(bitrate_val * 1000);
 			}
 		} else {
 			context->bit_rate = 0;
 		}
 		if (have_bitrate_range) {
-			if (int64_t max = obs_data_get_int(settings, ST_KEY_RATECONTROL_LIMITS_BITRATE_MAXIMUM); max > -1) {
-				context->rc_max_rate = static_cast<int>(max * 1000);
+			if (int64_t max_bitrate = obs_data_get_int(settings, ST_KEY_RATECONTROL_LIMITS_BITRATE_MAXIMUM); max_bitrate > -1) {
+				context->rc_max_rate = static_cast<int>(max_bitrate * 1000);
 			} else {
 				context->rc_max_rate = context->bit_rate;
 			}
@@ -652,8 +655,8 @@ void nvenc::update(ffmpeg_factory* factory, ffmpeg_instance* instance, obs_data_
 
 		// Buffer Size
 		if (have_bitrate || have_bitrate_range) {
-			if (int64_t v = obs_data_get_int(settings, ST_KEY_RATECONTROL_LIMITS_BUFFERSIZE); v > -1)
-				context->rc_buffer_size = static_cast<int>(v * 1000);
+			if (int64_t buf_size = obs_data_get_int(settings, ST_KEY_RATECONTROL_LIMITS_BUFFERSIZE); buf_size > -1)
+				context->rc_buffer_size = static_cast<int>(buf_size * 1000);
 		} else {
 			context->rc_buffer_size = 0;
 		}
@@ -672,8 +675,8 @@ void nvenc::update(ffmpeg_factory* factory, ffmpeg_instance* instance, obs_data_
 
 			// Quality Target
 			if (have_quality) {
-				if (double_t v = obs_data_get_double(settings, ST_KEY_RATECONTROL_LIMITS_QUALITY); v > 0) {
-					av_opt_set_double(context->priv_data, "cq", v, AV_OPT_SEARCH_CHILDREN);
+				if (double_t quality_val = obs_data_get_double(settings, ST_KEY_RATECONTROL_LIMITS_QUALITY); quality_val > 0) {
+					av_opt_set_double(context->priv_data, "cq", quality_val, AV_OPT_SEARCH_CHILDREN);
 				}
 			} else {
 				av_opt_set_double(context->priv_data, "cq", 0, AV_OPT_SEARCH_CHILDREN);

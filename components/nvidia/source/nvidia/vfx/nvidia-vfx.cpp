@@ -185,7 +185,7 @@ streamfx::nvidia::vfx::vfx::vfx()
 	}
 
 	{ // Assign proper GPU.
-		auto cctx = ::streamfx::nvidia::cuda::obs::get()->get_context()->enter();
+		auto cuda_ctx = ::streamfx::nvidia::cuda::obs::get()->get_context()->enter();
 		NvVFX_SetU32(nullptr, PARAMETER_GPU, 0);
 	}
 }

@@ -155,7 +155,7 @@ namespace streamfx::obs {
 		 *
 		 * May fail if the reference expired before we successfully acquire it.
 		 */
-		FORCE_INLINE ::streamfx::obs::source lock() const noexcept
+		inline ::streamfx::obs::source lock() const noexcept
 		{
 			return {obs_weak_source_get_source(_ref)};
 		};

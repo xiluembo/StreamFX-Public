@@ -26,6 +26,11 @@ namespace streamfx::obs::gs {
 		public:
 		~texture();
 
+		texture(const texture&)            = delete;
+		texture& operator=(const texture&) = delete;
+		texture(texture&&) noexcept;
+		texture& operator=(texture&&) noexcept;
+
 		/*!
 		 * \brief Create a 2D Texture
 		 *

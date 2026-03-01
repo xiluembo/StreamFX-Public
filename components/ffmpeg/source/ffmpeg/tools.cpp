@@ -238,6 +238,10 @@ bool tools::can_hardware_encode(const AVCodec* codec)
 {
 	AVPixelFormat hardware_formats[] = {AV_PIX_FMT_D3D11};
 
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable : 4996)
+#endif
 	for (const AVPixelFormat* fmt = codec->pix_fmts; (fmt != nullptr) && (*fmt != AV_PIX_FMT_NONE); fmt++) {
 		for (auto cmp : hardware_formats) {
 			if (*fmt == cmp) {
@@ -245,6 +249,9 @@ bool tools::can_hardware_encode(const AVCodec* codec)
 			}
 		}
 	}
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
 	return false;
 }
 
@@ -262,7 +269,6 @@ std::vector<AVPixelFormat> tools::get_software_formats(const AVPixelFormat* list
 		AV_PIX_FMT_MMAL,
 		AV_PIX_FMT_D3D11VA_VLD,
 		AV_PIX_FMT_CUDA,
-		AV_PIX_FMT_XVMC,
 		AV_PIX_FMT_VIDEOTOOLBOX,
 		AV_PIX_FMT_MEDIACODEC,
 		AV_PIX_FMT_D3D11,
@@ -291,7 +297,14 @@ void tools::context_setup_from_obs(const video_output_info* voi, AVCodecContext*
 	context->height = static_cast<int>(voi->height);
 
 	// Framerate
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable : 4996)
+#endif
 	context->ticks_per_frame = 1;
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
 	context->framerate.num = context->time_base.den = static_cast<int>(voi->fps_num);
 	context->framerate.den = context->time_base.num = static_cast<int>(voi->fps_den);
 

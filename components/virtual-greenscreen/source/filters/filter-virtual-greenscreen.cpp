@@ -409,9 +409,9 @@ void streamfx::filter::virtual_greenscreen::virtual_greenscreen_instance::task_s
 		case virtual_greenscreen_provider::NVIDIA_GREENSCREEN:
 			nvvfxgs_load();
 			{
-				auto data = obs_source_get_settings(_self);
-				nvvfxgs_update(data);
-				obs_data_release(data);
+				auto settings = obs_source_get_settings(_self);
+				nvvfxgs_update(settings);
+				obs_data_release(settings);
 			}
 			break;
 #endif

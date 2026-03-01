@@ -114,11 +114,18 @@ ffmpeg_instance::ffmpeg_instance(obs_data_t* settings, obs_encoder_t* self, bool
 	}
 
 	{ // Set up framerate division.
-		_framerate_divisor = obs_data_get_int(settings, ST_KEY_FFMPEG_FRAMERATE);
+		_framerate_divisor = static_cast<std::size_t>(obs_data_get_int(settings, ST_KEY_FFMPEG_FRAMERATE));
 
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable : 4996)
+#endif
 		_context->ticks_per_frame = 1;
-		_context->time_base.num *= _framerate_divisor;
-		_context->framerate.den *= _framerate_divisor;
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
+		_context->time_base.num   = static_cast<int>(static_cast<int64_t>(_context->time_base.num) * static_cast<int64_t>(_framerate_divisor));
+		_context->framerate.den   = static_cast<int>(static_cast<int64_t>(_context->framerate.den) * static_cast<int64_t>(_framerate_divisor));
 	}
 
 	// Update settings
@@ -237,7 +244,7 @@ bool ffmpeg_instance::update(obs_data_t* settings)
 			bool    is_seconds = (kf_type == 0);
 
 			if (is_seconds) {
-				double framerate   = static_cast<double>(ovi.fps_num) / (static_cast<double>(ovi.fps_den) * _framerate_divisor);
+				double framerate   = static_cast<double>(ovi.fps_num) / (static_cast<double>(ovi.fps_den) * static_cast<double>(_framerate_divisor));
 				_context->gop_size = static_cast<int>(obs_data_get_double(settings, ST_KEY_KEYFRAMES_INTERVAL_SECONDS) * framerate);
 			} else {
 				_context->gop_size = static_cast<int>(obs_data_get_int(settings, ST_KEY_KEYFRAMES_INTERVAL_FRAMES));
@@ -411,11 +418,18 @@ void ffmpeg_instance::initialize_sw(obs_data_t* settings)
 	AVPixelFormat pix_fmt_source = ::streamfx::ffmpeg::tools::obs_videoformat_to_avpixelformat(voi->format);
 	AVPixelFormat pix_fmt_target = AV_PIX_FMT_NONE;
 	{
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable : 4996)
+#endif
 		if (_codec->pix_fmts) {
 			pix_fmt_target = ::streamfx::ffmpeg::tools::get_least_lossy_format(_codec->pix_fmts, pix_fmt_source);
 		} else { // If there are no supported formats, just pass in the current one.
 			pix_fmt_target = pix_fmt_source;
 		}
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
 
 		if (_handler) // Allow Handler to override the automatic color format for sanity reasons.
 			_handler->override_colorformat(this->_factory, this, settings, pix_fmt_target);

@@ -116,9 +116,9 @@ dynamic_mask_instance::dynamic_mask_instance(obs_data_t* settings, obs_source_t*
 	  _have_final(false), //
 	  _final_rt(), //
 	  _final_tex(), //
+	  _debug_texture(-1), //
 	  _channels(), //
-	  _precalc(), //
-	  _debug_texture(-1) //
+	  _precalc() //
 {
 	update(settings);
 }
@@ -784,10 +784,10 @@ obs_properties_t* dynamic_mask_factory::get_properties2(dynamic_mask_instance* d
 		obs_properties_add_group(props, "Debug", D_TRANSLATE(S_ADVANCED), OBS_GROUP_NORMAL, grp);
 
 		{
-			auto p = obs_properties_add_list(grp, ST_KEY_DEBUG_TEXTURE, D_TRANSLATE(ST_I18N_DEBUG_TEXTURE), OBS_COMBO_TYPE_LIST, OBS_COMBO_FORMAT_INT);
-			obs_property_list_add_int(p, D_TRANSLATE(S_STATE_DISABLED), -1);
-			obs_property_list_add_int(p, D_TRANSLATE(ST_I18N_DEBUG_TEXTURE_BASE), 0);
-			obs_property_list_add_int(p, D_TRANSLATE(ST_I18N_DEBUG_TEXTURE_INPUT), 1);
+			auto debug_prop = obs_properties_add_list(grp, ST_KEY_DEBUG_TEXTURE, D_TRANSLATE(ST_I18N_DEBUG_TEXTURE), OBS_COMBO_TYPE_LIST, OBS_COMBO_FORMAT_INT);
+			obs_property_list_add_int(debug_prop, D_TRANSLATE(S_STATE_DISABLED), -1);
+			obs_property_list_add_int(debug_prop, D_TRANSLATE(ST_I18N_DEBUG_TEXTURE_BASE), 0);
+			obs_property_list_add_int(debug_prop, D_TRANSLATE(ST_I18N_DEBUG_TEXTURE_INPUT), 1);
 		}
 	}
 
