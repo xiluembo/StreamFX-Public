@@ -128,6 +128,11 @@ streamfx::ui::updater::updater(QMenu* menu) : _updater(), _dialog(nullptr), _gdp
 		_channel_group->addAction(_channel_beta);
 		_channel_group->addAction(_channel_alpha);
 		connect(_channel_group, &QActionGroup::triggered, this, &streamfx::ui::updater::on_channel_group_triggered);
+
+		// Disabled: updates are no longer supported in this version.
+		_cfu->setEnabled(false);
+		_cfu_auto->setEnabled(false);
+		_channel_menu->menuAction()->setEnabled(false);
 	}
 
 	// Connect internal signals.
@@ -172,14 +177,8 @@ void streamfx::ui::updater::on_updater_refreshed(streamfx::updater&)
 
 void streamfx::ui::updater::obs_ready()
 {
-	if (_updater->is_automated()) {
-		if (_updater->is_data_sharing_allowed()) {
-			_updater->refresh();
-		} else {
-			create_gdpr_box();
-			_gdpr->exec();
-		}
-	}
+	// Disabled: updates are no longer supported in this version.
+	(void)0;
 }
 
 void streamfx::ui::updater::on_channel_changed(streamfx::version_stage ch)

@@ -161,6 +161,12 @@ void streamfx::ui::handler::on_obs_loaded()
 			_action_youtube = _menu->addAction(QString::fromUtf8(D_TRANSLATE(_i18n_menu_youtube.data())));
 			_action_youtube->setMenuRole(QAction::NoRole);
 			connect(_action_youtube, &QAction::triggered, this, &streamfx::ui::handler::on_action_youtube);
+
+			// Disabled: links are no longer supported in this version.
+			_action_website->setEnabled(false);
+			_action_discord->setEnabled(false);
+			_action_twitter->setEnabled(false);
+			_action_youtube->setEnabled(false);
 		}
 
 		// Create the updater.
