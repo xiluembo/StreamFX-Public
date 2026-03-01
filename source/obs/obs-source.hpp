@@ -494,7 +494,7 @@ namespace streamfx::obs {
 		 *
 		 * EXPORT obs_source_t *obs_filter_get_parent(const obs_source_t *filter);
 		 */
-		FORCE_INLINE ::streamfx::obs::source get_filter_parent()
+		inline ::streamfx::obs::source get_filter_parent()
 		{
 			return obs_filter_get_parent(_ref);
 		};
@@ -503,7 +503,7 @@ namespace streamfx::obs {
 		 *
 		 * EXPORT obs_source_t *obs_filter_get_target(const obs_source_t *filter);
 		 */
-		FORCE_INLINE ::streamfx::obs::source get_filter_target()
+		inline ::streamfx::obs::source get_filter_target()
 		{
 			return obs_filter_get_target(_ref);
 		};

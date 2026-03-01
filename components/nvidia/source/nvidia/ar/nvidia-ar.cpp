@@ -192,7 +192,7 @@ streamfx::nvidia::ar::ar::ar() : _library(), _model_path()
 	}
 
 	{ // Assign proper GPU.
-		auto cctx = ::streamfx::nvidia::cuda::obs::get()->get_context()->enter();
+		auto cuda_ctx = ::streamfx::nvidia::cuda::obs::get()->get_context()->enter();
 		NvAR_SetU32(nullptr, P_NVAR_CONFIG "GPU", 0);
 	}
 }

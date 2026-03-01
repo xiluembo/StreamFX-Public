@@ -243,7 +243,9 @@ namespace streamfx::util {
 			public:
 			kalman1D() : _q_process_noise_covariance(0), _r_measurement_noise_covariance(0), _x_value_of_interest(0), _p_estimation_error_covariance(0), _k_kalman_gain(0.0) {}
 			kalman1D(T pnc, T mnc, T eec, T value) : _q_process_noise_covariance(pnc), _r_measurement_noise_covariance(mnc), _x_value_of_interest(value), _p_estimation_error_covariance(eec), _k_kalman_gain(0.0) {}
-			~kalman1D() = default;
+			kalman1D(const kalman1D&)            = default;
+			kalman1D& operator=(const kalman1D&) = default;
+			~kalman1D()                         = default;
 
 			T filter(T measurement)
 			{

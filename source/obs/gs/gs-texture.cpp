@@ -135,6 +135,38 @@ streamfx::obs::gs::texture::~texture()
 	_texture = nullptr;
 }
 
+streamfx::obs::gs::texture::texture(texture&& other) noexcept : _texture(other._texture), _is_owner(other._is_owner), _type(other._type)
+{
+	other._texture  = nullptr;
+	other._is_owner = false;
+}
+
+streamfx::obs::gs::texture& streamfx::obs::gs::texture::operator=(texture&& other) noexcept
+{
+	if (this != &other) {
+		if (_is_owner && _texture) {
+			auto gctx = streamfx::obs::gs::context();
+			switch (gs_get_texture_type(_texture)) {
+			case GS_TEXTURE_2D:
+				gs_texture_destroy(_texture);
+				break;
+			case GS_TEXTURE_3D:
+				gs_voltexture_destroy(_texture);
+				break;
+			case GS_TEXTURE_CUBE:
+				gs_cubetexture_destroy(_texture);
+				break;
+			}
+		}
+		_texture  = other._texture;
+		_is_owner = other._is_owner;
+		_type     = other._type;
+		other._texture  = nullptr;
+		other._is_owner = false;
+	}
+	return *this;
+}
+
 void streamfx::obs::gs::texture::load(int32_t unit)
 {
 	auto gctx = streamfx::obs::gs::context();

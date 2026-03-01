@@ -16,6 +16,8 @@ namespace streamfx::obs::gs {
 
 		vertex();
 		vertex(vec3* p, vec3* n, vec3* t, uint32_t* col, vec4* uv[MAXIMUM_UVW_LAYERS]);
+		vertex(const vertex&);
+		vertex& operator=(const vertex&) = delete;
 		~vertex();
 
 		private:

@@ -47,3 +47,10 @@ streamfx::obs::gs::vertex::vertex(vec3* p, vec3* n, vec3* t, uint32_t* col, vec4
 		}
 	}
 }
+
+streamfx::obs::gs::vertex::vertex(const vertex& other) : position(other.position), normal(other.normal), tangent(other.tangent), color(other.color), _has_store(false), _store(nullptr)
+{
+	for (std::size_t n = 0; n < MAXIMUM_UVW_LAYERS; n++) {
+		uv[n] = other.uv[n];
+	}
+}
